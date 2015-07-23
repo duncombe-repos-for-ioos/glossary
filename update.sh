@@ -13,6 +13,17 @@
 # It flakes out periodically for dumb stupid unknown reason, probably due
 # to user error (what else? it's always the dumb user). Fail safe method?
 
+# if we are working on a branch we may not want to  update gh-pages. Get
+# confirmation.
+
+if ! git status --porcelain -b | grep \#\# | grep master > /dev/null ; then
+  echo You are not on master branch and about to push to gh-pages.
+  YN=N
+  read -p "Continue to publish to the website, despite being on a side branch? (y/N) " YN
+  [ "$YN" != "y" -a "$YN" != "Y" ] && exit 1
+
+fi
+
 TEMPDIR=`mktemp -d`
 git clone -b gh-pages ssh://git@github.com/duncombe/glossary.git $TEMPDIR ||
   { echo failed to clone; exit 1 ; }
@@ -29,4 +40,6 @@ cp -a public/* $TEMPDIR ||
 )
 
 rm -rf dummy $TEMPDIR
+
+# vi: se nowrap tw=0 :
 

@@ -8,6 +8,9 @@ case ${1} in
 	11|12)	HUGOBIN="hugo${1}" ; shift ;;
 esac 
 
+
+rm -r public/*
+
 $HUGOBIN ${@}
 
 # the version will only be updated if hugo is not run in server mode
